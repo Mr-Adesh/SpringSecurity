@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+var name=localStorage.getItem("fn");
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope, $http,$window) {
+	     
+		$scope.desc="";
+		$scope.postTask=function()
+		{
+		 var post=$http({
+             method: "POST",
+             url: "http://localhost:8080/SpringBootJwtApplication/task",
+             dataType: 'json',
+             data: { 'description':$scope.desc},
+             headers: { "Content-Type": "application/json","Authorization":name}
+         }).then(function successCallback(response) {
+              alert("stored");
+              //$scope.a=response.data;
+           }, function errorCallback(response) {
+               alert(response.data);// called asynchronously if an error occurs
+          });
+		}
+		
+		$scope.getTask=function()
+		{
+		 var post=$http({
+             method: "GET",
+             url: "http://localhost:8080/SpringBootJwtApplication/task",
+             /* dataType: 'json',
+             data: { 'username':$scope.desc}, */
+             headers: { "Accept": "application/json","Authorization":name}
+         }).then(function successCallback(response) {
+              alert("got");
+              $scope.a=response.data;
+           }, function errorCallback(response) {
+        	   
+        	   alert("session Has been Expired Pls Login again to refresh");
+        	   $window.location.href = 'http://localhost:8080/AngularJWTclient/login.htm';
+        	   // called asynchronously if an error occurs
+          });
+		}
+		
+		});
+</script>
+
+</head>
+<body>
+
+	<div ng-app="myApp" ng-controller="myCtrl">
+Enter TaskDesc:<input type="text" ng-model="desc"></br>
+<button ng-click="postTask()">Register</button></br>
+<button ng-click="getTask()">Got</button></br>
+
+		<h4>{{a}}</h4>
+		{{b}}
+		
+		Adesh singh
+</div>
+</body>
+</html>
